@@ -30,6 +30,13 @@ if (!defined('ABSPATH')) {
 if ( ! class_exists('Class_WP_ezClasses_Theme_Register_Nav_Menus_1') ) {
   class Class_WP_ezClasses_Theme_Register_Nav_Menus_1 extends Class_WP_ezClasses_Master_Singleton{
   
+    private $_version;
+	private $_url;
+	private	$_path;
+	private $_path_parent;
+	private $_basename;
+	private $_file;
+  
     protected $_arr_init;
 		
 	protected function __construct() {
@@ -39,11 +46,13 @@ if ( ! class_exists('Class_WP_ezClasses_Theme_Register_Nav_Menus_1') ) {
 	/**
 	 *
 	 */
-	public function ezc_init($arr_args = ''){
+	public function ez__construct($arr_args = ''){
+	
+	  $this->setup();
 	 
 	  $arr_init_defaults = $this->init_defaults();
 	  
-	  $this->_arr_init = WP_ezMethods::ez_array_merge(array($arr_init_defaults, $arr_args));
+	  $this->_arr_init = WPezHelpers::ez_array_merge(array($arr_init_defaults, $arr_args));
 	}
 		
 
@@ -60,6 +69,17 @@ if ( ! class_exists('Class_WP_ezClasses_Theme_Register_Nav_Menus_1') ) {
 	  return $arr_defaults;
 	}
 	
+    protected function setup(){	
+	
+	  $this->_version = '0.5.0';
+	  $this->_url = plugin_dir_url( __FILE__ );
+	  $this->_path = plugin_dir_path( __FILE__ );
+	  $this->_path_parent = dirname($this->_path);
+	  $this->_basename = plugin_basename( __FILE__ );
+	  $this->_file = __FILE__ ;	
+	
+	}
+	
 	
 	
 		/**
@@ -68,13 +88,13 @@ if ( ! class_exists('Class_WP_ezClasses_Theme_Register_Nav_Menus_1') ) {
 		public function ez_rnm( $arr_args = '' ){
 		
 
-		  if ( ! WP_ezMethods::array_pass($arr_args) ){
+		  if ( ! WPezHelpers::ez_array_pass($arr_args) ){
 		    return array('status' => false, 'msg' => 'ERROR: arr_args is not valid', 'source' => get_class() . ' ' . __METHOD__, 'arr_args' => 'error');
 		  }
 				
-		  $arr_args = WP_ezMethods::ez_array_merge(array( $this->_arr_init, $arr_args)); 
+		  $arr_args = WPezHelpers::ez_array_merge(array( $this->_arr_init, $arr_args)); 
 		  
-			if ( $arr_args['active'] === true && WP_ezMethods::array_pass($arr_args['arr_args']) ){
+			if ( $arr_args['active'] === true && WPezHelpers::ez_array_pass($arr_args['arr_args']) ){
 			
 			  $arr_nav_menus = $arr_args['arr_args'];
 				
@@ -93,7 +113,7 @@ if ( ! class_exists('Class_WP_ezClasses_Theme_Register_Nav_Menus_1') ) {
 				*/
 								
 				// active_true
-				if ( WP_ezMethods::ez_true($arr_args['active_true']) ){
+				if ( WPezHelpers::ez_true($arr_args['active_true']) ){
 					$arr_active_true_response = $this->register_nav_menus_active_true($arr_nav_menus);
 					if ( $arr_active_true_response['status'] === false ){
 
@@ -192,11 +212,11 @@ if ( ! class_exists('Class_WP_ezClasses_Theme_Register_Nav_Menus_1') ) {
 		public function register_nav_menus_active_true($arr_args = '') {
 			$str_return_source = get_class() . ' ' . __METHOD__;  
 
-			if ( WP_ezMethods::array_pass($arr_args) ) {
+			if ( WPezHelpers::ez_array_pass($arr_args) ) {
 
 				$arr_active_true = array();			
 				foreach ($arr_args as $str_key => $arr_value){
-					if ( WP_ezMethods::ez_true($arr_value['active']) ){
+					if ( WPezHelpers::ez_true($arr_value['active']) ){
 						$arr_active_true[$str_key] = $arr_value;
 					}			
 				}
@@ -215,7 +235,7 @@ if ( ! class_exists('Class_WP_ezClasses_Theme_Register_Nav_Menus_1') ) {
 		
 		  $str_return_source = get_class() . ' > ' . __METHOD__; 
 
-		  if ( WP_ezMethods::array_pass($arr_args) ){
+		  if ( WPezHelpers::ez_array_pass($arr_args) ){
 			
 			foreach ($arr_args as $str_key => $arr_value){
 			  /**			  
